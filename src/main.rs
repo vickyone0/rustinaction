@@ -1,5 +1,8 @@
+use std::thread;
 fn main() {
-  let x = 5.to_string();
-  drop(x);
-  println!("{}", x); // This line would cause a compile-time error
-}
+let mut data = 100;
+
+thread::spawn(|| { data = 500; });
+thread::spawn(|| { data = 1000; });
+ println!("{}", data);
+ }
