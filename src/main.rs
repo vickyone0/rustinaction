@@ -1,36 +1,73 @@
-#[derive(Debug)]
-enum Event {
-    Update,
-    Delete,
-    Unknown,
+trait Engine {
+    fn new() -> Self
+    where
+        Self: Sized;
+    fn fuel_type(&self) -> String;
 }
 
-type Message = String;
+struct DesielEngine {
+    fuel_type: String,
+}
 
-fn parse_log(line: &str) -> (Event, Message) {
-    let parts:Vec<_> = line.splitn(2, ' ').collect();
-
-    if parts.len() == 1 {
-        return (Event::Unknown, String::from(line))
+impl Engine for DesielEngine {
+    fn new() -> Self {
+        DesielEngine {
+            fuel_type: String::from("Diesel"),
+        }
     }
 
-    let event = parts[0];
-    let rest = String::from(parts[1]);
+    fn fuel_type(&self) -> String {
+        self.fuel_type.clone()
+    }
+}
 
-    match event {
-        "update" | "UPDATE" => (Event::Update, rest),
-        "delete" | "DELETE" => (Event::Delete, rest),
-        _ => (Event::Unknown, String::from(line)),
+// New PetrolEngine struct
+struct PetrolEngine {
+    fuel_type: String,
+}
+
+// Implement the Engine trait for PetrolEngine
+impl Engine for PetrolEngine {
+    fn new() -> Self {
+        PetrolEngine {
+            fuel_type: String::from("Petrol"),
+        }
+    }
+
+    fn fuel_type(&self) -> String {
+        self.fuel_type.clone()
+    }
+}
+
+struct Car {
+    color: String,
+    engine: Box<dyn Engine>,
+    wheels: i32,
+}
+
+impl Car {
+    // Allow specifying the engine type dynamically
+    fn new(color: String, engine: Box<dyn Engine>, wheels: i32) -> Self {
+        Car {
+            color,
+            engine,
+            wheels,
+        }
+    }
+
+    fn display(&self) {
+        println!("Car Color: {}", self.color);
+        println!("Car Engine Fuel Type: {}", self.engine.fuel_type());
+        println!("Car Wheels: {}", self.wheels);
     }
 }
 
 fn main() {
-    let log = "BEGIN Transaction XK342
-UPDATE 234:LS/32231 {\"prince\": 31.00} -> {\"prince\": 40.00}
-DELETE 342:LO/22111";
+    // Create a car with a diesel engine
+    let diesel_car = Car::new(String::from("Red"), Box::new(DesielEngine::new()), 4);
+    diesel_car.display();
 
-for line in log.lines() {
-    let parse_result = parse_log(line);
-    println!("{:?}", parse_result);
-}
+    // Create a car with a petrol engine
+    let petrol_car = Car::new(String::from("Blue"), Box::new(PetrolEngine::new()), 4);
+    petrol_car.display();
 }
