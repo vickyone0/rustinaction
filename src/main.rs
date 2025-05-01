@@ -1,13 +1,29 @@
-use std::fs::File;
-use std::io::BufReader;
-use std::io::prelude::*;
+use core::panic;
 
- fn main() {
- let f = File::open("readme.md").unwrap();
- let reader = BufReader::new(f);
+use rand::{random};
 
-for line_ in reader.lines() {
- let line = line_.unwrap();
- println!("{} ({} bytes long)", line, line.len());
+static mut ERROR: i32 = 0;
+
+struct File;
+
+#[allow(unused_variables)]
+fn read(f: &File, save_to: &mut Vec<u8>) ->usize{
+    if random() && random() && random() {
+        unsafe { ERROR = 1; }
+    }
+    0
 }
- }
+
+#[allow(unused_mut)]
+fn main() {
+    let mut f = File;
+    let mut buffer = vec![];
+
+    read(&f, &mut buffer);
+
+    unsafe{
+        if ERROR !=0 {
+            panic!("An error occurred");
+        }
+    }
+}
