@@ -1,73 +1,36 @@
-trait Engine {
-    fn new() -> Self
-    where
-        Self: Sized;
-    fn fuel_type(&self) -> String;
+#[allow(unused_variables)]
+
+#[derive(Debug)]
+struct Cubesat{
+    id:u64,
 }
 
-struct DesielEngine {
-    fuel_type: String,
+#[derive(Debug)]
+enum Status {
+    Ok,
 }
 
-impl Engine for DesielEngine {
-    fn new() -> Self {
-        DesielEngine {
-            fuel_type: String::from("Diesel"),
-        }
-    }
-
-    fn fuel_type(&self) -> String {
-        self.fuel_type.clone()
-    }
-}
-
-// New PetrolEngine struct
-struct PetrolEngine {
-    fuel_type: String,
-}
-
-// Implement the Engine trait for PetrolEngine
-impl Engine for PetrolEngine {
-    fn new() -> Self {
-        PetrolEngine {
-            fuel_type: String::from("Petrol"),
-        }
-    }
-
-    fn fuel_type(&self) -> String {
-        self.fuel_type.clone()
-    }
-}
-
-struct Car {
-    color: String,
-    engine: Box<dyn Engine>,
-    wheels: i32,
-}
-
-impl Car {
-    // Allow specifying the engine type dynamically
-    fn new(color: String, engine: Box<dyn Engine>, wheels: i32) -> Self {
-        Car {
-            color,
-            engine,
-            wheels,
-        }
-    }
-
-    fn display(&self) {
-        println!("Car Color: {}", self.color);
-        println!("Car Engine Fuel Type: {}", self.engine.fuel_type());
-        println!("Car Wheels: {}", self.wheels);
-    }
+fn check_status(sat_id: Cubesat) -> Status {
+    Status::Ok
 }
 
 fn main() {
-    // Create a car with a diesel engine
-    let diesel_car = Car::new(String::from("Red"), Box::new(DesielEngine::new()), 4);
-    diesel_car.display();
+    let cubsat_a = Cubesat { id: 1 };
+    let cubsat_b = Cubesat { id: 2 };
+    let cubsat_c = Cubesat { id: 3 };
 
-    // Create a car with a petrol engine
-    let petrol_car = Car::new(String::from("Blue"), Box::new(PetrolEngine::new()), 4);
-    petrol_car.display();
+    //println!("a: {:?} , b: {:?}, c: {:?}", cubsat_a , cubsat_b, cubsat_c);
+
+    let a_status = check_status(cubsat_a);
+   let b_status = check_status(cubsat_b);
+   let c_status = check_status(cubsat_c);
+    println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
+
+    
+    let a_status = check_status(cubsat_a);
+   let b_status = check_status(cubsat_b);
+   let c_status = check_status(cubsat_c);
+    println!("a: {:?} , b: {:?}, c: {:?}", cubsat_a , cubsat_b, cubsat_c);
+ 
+    
 }
