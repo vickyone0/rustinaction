@@ -1,29 +1,36 @@
-use core::panic;
-
-use rand::{random};
-
-static mut ERROR: i32 = 0;
-
-struct File;
-
-#[allow(unused_variables)]
-fn read(f: &File, save_to: &mut Vec<u8>) ->usize{
-    if random() && random() && random() {
-        unsafe { ERROR = 1; }
-    }
-    0
+#[derive(Debug)]
+enum Event {
+    Update,
+    Delete,
+    Unknown,
 }
 
-#[allow(unused_mut)]
-fn main() {
-    let mut f = File;
-    let mut buffer = vec![];
+type Message = String;
 
-    read(&f, &mut buffer);
+fn parse_log(line: &str) -> (Event, Message) {
+    let parts:Vec<_> = line.splitn(2, ' ').collect();
 
-    unsafe{
-        if ERROR !=0 {
-            panic!("An error occurred");
-        }
+    if parts.len() == 1 {
+        return (Event::Unknown, String::from(line))
     }
+
+    let event = parts[0];
+    let rest = String::from(parts[1]);
+
+    match event {
+        "update" | "UPDATE" => (Event::Update, rest),
+        "delete" | "DELETE" => (Event::Delete, rest),
+        _ => (Event::Unknown, String::from(line)),
+    }
+}
+
+fn main() {
+    let log = "BEGIN Transaction XK342
+UPDATE 234:LS/32231 {\"prince\": 31.00} -> {\"prince\": 40.00}
+DELETE 342:LO/22111";
+
+for line in log.lines() {
+    let parse_result = parse_log(line);
+    println!("{:?}", parse_result);
+}
 }
