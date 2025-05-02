@@ -1,36 +1,23 @@
-#[allow(unused_variables)]
-
-#[derive(Debug)]
-struct Cubesat{
-    id:u64,
+#[derive(Debug, Clone, Copy)]
+struct Cubsat {
+    cub_id: u32,
 }
 
-#[derive(Debug)]
-enum Status {
+
+#[derive(Debug, Clone, Copy)]
+enum StatusMessage {
     Ok,
 }
 
-fn check_status(sat_id: Cubesat) -> Status {
-    Status::Ok
+fn check_status(cub_id:Cubsat) -> StatusMessage{
+    StatusMessage::Ok
 }
 
-fn main() {
-    let cubsat_a = Cubesat { id: 1 };
-    let cubsat_b = Cubesat { id: 2 };
-    let cubsat_c = Cubesat { id: 3 };
+fn  main() {
+    let cub_id = Cubsat { cub_id: 1 };
+    let status = check_status(cub_id.clone());
+    println!("{:?}", status.clone());
 
-    //println!("a: {:?} , b: {:?}, c: {:?}", cubsat_a , cubsat_b, cubsat_c);
-
-    let a_status = check_status(cubsat_a);
-   let b_status = check_status(cubsat_b);
-   let c_status = check_status(cubsat_c);
-    println!("a: {:?}, b: {:?}, c: {:?}", a_status, b_status, c_status);
-
-    
-    let a_status = check_status(cubsat_a);
-   let b_status = check_status(cubsat_b);
-   let c_status = check_status(cubsat_c);
-    println!("a: {:?} , b: {:?}, c: {:?}", cubsat_a , cubsat_b, cubsat_c);
- 
-    
+    let status = check_status(cub_id);
+     println!("{:?}", status);
 }
