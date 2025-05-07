@@ -1,13 +1,10 @@
+use std::mem::transmute;
 fn main() {
-    let s = String::from("Hello, world!");
-    let p = &s as *const String; // Create a raw pointer to `s`
-    println!("{}", *p); // Dereference the raw pointer to print `s`
-    println!("{}", s);
-}fn main() {
-    unsafe {
-        let s = String::from("Hello, world!");
-        let p = &s as *const String; // Create a raw pointer to `s`
-        println!("{}", *p); // Dereference the raw pointer to print `s`
-        println!("{}", s); // Use `s` directly
-    }
+ let big_endian: [u8; 4] = [0xAA, 0xBB, 0xCC, 0xDD];
+ let little_endian: [u8; 4] = [0xDD, 0xCC, 0xBB, 0xAA];
+
+ println!("{:?} vs {:?}", big_endian, little_endian);
+ let a: i32 = unsafe { transmute(big_endian) };
+ let b: i32 = unsafe { transmute(little_endian) };
+ println!("{} vs {}", a, b);
 }
